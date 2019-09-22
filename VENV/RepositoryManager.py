@@ -1,5 +1,6 @@
 from enum import Enum
 from Tray import Tray
+from Singleton import Singleton
 
 class eIngredientType(Enum):
     IN_CLOVE = 0,
@@ -11,7 +12,7 @@ class eIngredientType(Enum):
     IN_RED_CHILLI_POWDER = 6,
     IN_TURMERIC_POWDER = 7,
 
-class RepositoryManager:
+class RepositoryManager(Singleton):
 
     trays = []
     numTrays = 0

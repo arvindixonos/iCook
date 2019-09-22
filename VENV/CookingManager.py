@@ -1,7 +1,9 @@
+import time
 from Singleton import Singleton
 from multiprocessing import Process, Manager, Dict, List, Value
 from MoveManager import MoveManager
-import time
+from RepositoryManager import RepositoryManager, eIngredientType
+
 
 class CookingManager(Singleton):
 
@@ -12,6 +14,7 @@ class CookingManager(Singleton):
     isCooking = None
     multiprocessingManager = None
     recipeQueue = None
+    waitcondition = None
 
 
     def CookingProcess(self, recipeQueue, isCooking):
@@ -44,6 +47,7 @@ class CookingManager(Singleton):
         self.multiprocessingManager = Manager()
         self.isCooking = self.multiprocessingManager.Value('b', False)
         self.recipeQueue = self.multiprocessingManager.dict()
+        self.waitcondition = self.multiprocessingManager.Condition()
         self.cookingProcess = Process(target=self.CookingProcess, args=(self.recipeQueue, self.isCooking))
         self.cookingProcess.start()
 
@@ -68,11 +72,25 @@ class CookingManager(Singleton):
             print ("Recipe not loaded")
 
 
+
+
     def PerformRecipeStep(self, recipeStep):
         recipeStepType = recipeStep.recipeStepType
         stepDuration = recipeStep.duration
 
         if recipeStepType == eRecipeStepType.ADD_INGREDIENT:
-            MoveManager.getInstance()
+            ingredientType = eIngredientType[recipeStep.payload]
+            ingredientTray = RepositoryManager.getInstance().GetIngredientTray(ingredientType)
+
+            if ingredientTray is None:
+                print ("Please load the ingredient")
+            else:
+                MoveManager.getInstance().MovetoTray(ingredientTray)
+                self.waitcondition.wait()
+                MoveManager.getInstance().
+
+
+
+
 
 

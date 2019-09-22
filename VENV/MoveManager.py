@@ -6,18 +6,6 @@ import time
 import numpy as np
 from enum import Enum
 
-class eMoveState(Enum):
-    MS_IDLE = 0,
-    MS_RETURNING_TO_IDLE = 1,
-    MS_MOVING_TO_TRAY_HOLD_POSITION = 2,
-    MS_HOLDING_TRAY = 3,
-    MS_RETRIEVE_TRAY_TO_DROP_POSITION = 4,
-    MS_DROPPING_TO_PAN = 5,
-    MS_RETURNING_TRAY_TO_DOCK = 6,
-    MS_MOVING_TO_STIRRER_HOLD_POSITION = 7,
-    MS_HOLDING_STIRRER = 8,
-    MS_STIRRING = 9,
-    MS_RETURNING_STIRRER_TO_DOCK = 10,
 
 
 class MoveManager(Singleton):
@@ -25,11 +13,20 @@ class MoveManager(Singleton):
     robotChain = None
 
     currentMoveState = eMoveState.MS_RETURNING_TO_IDLE
+    previousStateQueue = []
+
+    moveStatesQueue = []
 
     minimumDistance = 0.0001
 
+    onStateComplete = None
+
     def __init__(self):
         self.robotChain = ikpy.chain.Chain.from_urdf_file(urdfFilePath)
+
+    def ChangeState(self, newState, payload):
+        self.previousStateQueue.append(newState)
+
 
     def MovetoPosition(self, targetPosition):
         target_frame = np.eye(4)
@@ -54,3 +51,9 @@ class MoveManager(Singleton):
     def GetDistance(self, vector1, vector2):
         resVector = vector2 - vector1
         return np.linalg.norm(resVector)
+
+    def AddMoveCompleteCallback(self, callback):
+        self.moveCompleteCallback += callback
+
+    def RemoveMoveCompleteCallback(self, callback):
+        self.moveCompleteCallback -= callback
