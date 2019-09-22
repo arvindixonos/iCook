@@ -17,7 +17,7 @@ class Recipe:
 
     @staticmethod
     def FromJSON(jsonString):
-        
+
 
 
         assert False, "FROM JSON IMPLEMENTATION PENDING"
