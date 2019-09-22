@@ -17,6 +17,9 @@ class Tray:
         self.ingredientType = ingredientType
         self.amounts = {}
 
+    def isTrayFree(self):
+        return self.isIngredientPresent is False
+
     def GetIngredientPresent(self):
         if self.isIngredientPresent == True:
             return self.ingredientType, self.amounts

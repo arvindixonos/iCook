@@ -1,37 +1,19 @@
 import numpy
 from RecipeManager import RecipeManager
 from RecipeStep import eRecipeStepType
+from CookingManager import CookingManager
 
 class iCook:
 
     name = ""
     recipeManager = None
-    ingredientsTrayMap = {}
+    repositoryManager = None
+    cookingManager = None
 
     def __init__(self, name):
         self.name = name
         self.recipeManager = RecipeManager()
-
-    def LoadRecipe(self, recipeName):
-        recipeLoaded, recipe = self.recipeManager.LoadRecipe(recipeName)
-
-        if recipeLoaded == True:
-            CookRecipe(recipe)
-
-        assert False, "NO IMPLEMENTATION"
-
-    def CookRecipe(self, recipe):
-        recipeSteps = recipe.recipeSteps
-
-        for recipeStep in recipeSteps:
-            PerformRecipeStep(recipeStep)
-
-    def PerformRecipeStep(self, recipeStep):
-        recipeStepType = recipeStep.recipeStepType
-        stepDuration = recipeStep.duration
-
-        if recipeStepType == eRecipeStepType.ADD_INGREDIENT:
-
+        self.cookingManager = CookingManager()
 
 
 
