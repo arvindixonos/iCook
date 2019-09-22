@@ -2,8 +2,9 @@ import numpy
 from RecipeManager import RecipeManager
 from RecipeStep import eRecipeStepType
 from CookingManager import CookingManager
+from Singleton import Singleton
 
-class iCook:
+class iCook(Singleton):
 
     name = ""
     recipeManager = None
@@ -15,12 +16,13 @@ class iCook:
         self.recipeManager = RecipeManager()
         self.cookingManager = CookingManager()
 
+    def LoadReceipe(self):
+        CookingManager.getInstance().
 
-
-iCookInstance = None
 def main():
 
-    iCookInstance = iCook("Instance")
+    iCookInstance = iCook.getInstance()
     iCookInstance.LoadRecipe("SomeName.json")
+
 
 main()

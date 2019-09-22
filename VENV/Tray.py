@@ -1,6 +1,6 @@
 from RepositoryManager import eIngredientType
 from enum import Enum
-
+import numpy as np
 
 class eAmountUnitType(Enum):
     UNIT_GRAMS = 0,
@@ -8,13 +8,17 @@ class eAmountUnitType(Enum):
     UNIT_LITRES = 2
 
 class Tray:
+
+    holderPosition = None
+
     isIngredientPresent = False
     ingredientType = None
     amounts = {}
 
-    def __init__(self, ingredientType):
-        self.isIngredientPresent = True
-        self.ingredientType = ingredientType
+    def __init__(self, holderPosition):
+        self.holderPosition = holderPosition
+        self.isIngredientPresent = False
+        self.ingredientType = None
         self.amounts = {}
 
     def isTrayFree(self):
@@ -25,6 +29,9 @@ class Tray:
             return self.ingredientType, self.amounts
 
         return None, None
+
+    def GetHolderPosition(self):
+        return self.holderPosition
 
     def SetIngredient(self, ingredientType, amountType, amount):
         self.ingredientType = ingredientType
