@@ -4,13 +4,11 @@ class eRecipeStepType(Enum):
     IDLE = 0,
     HEAT = 1,
     ADD_INGREDIENT = 2,
-    FRY_IDLE = 3,
-    FRY_STIR = 4,
-    SAUTE = 5,
-    POUR = 6,
-    SPRINKLE = 7,
-    COVER_COOK = 8,
-    PLACE = 9
+    STIR = 3,
+    POUR = 4,
+    SPRINKLE = 5,
+    COVER_COOK = 6,
+    PLACE = 7
 
 class RecipeStep:
     recipeStepType = eRecipeStepType.IDLE

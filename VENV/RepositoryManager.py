@@ -18,6 +18,7 @@ class RepositoryManager(Singleton):
     numTrays = 0
 
     def __init__(self, numTrays):
+        Singleton.__init__(self)
         self.numTrays = numTrays
 
         for i in range(self.numTrays):

@@ -1,5 +1,6 @@
 from Globals import urdfFilePath, idlePosition
 from Singleton import Singleton
+from MoveStateMachine import MoveStateMachine, eMoveState
 from Tray import Tray
 import ikpy
 import time
@@ -12,21 +13,25 @@ class MoveManager(Singleton):
 
     robotChain = None
 
-    currentMoveState = eMoveState.MS_RETURNING_TO_IDLE
-    previousStateQueue = []
-
-    moveStatesQueue = []
+    moveStateMachine = None
 
     minimumDistance = 0.0001
 
-    onStateComplete = None
+    onIdle = None
 
     def __init__(self):
+        Singleton.__init__(self)
         self.robotChain = ikpy.chain.Chain.from_urdf_file(urdfFilePath)
+        self.moveStateMachine = MoveStateMachine()
+
+    def MoveStateMachineOnIdle(self):
+        onIdle()
 
     def ChangeState(self, newState, payload):
-        self.previousStateQueue.append(newState)
+        self.moveStateMachine.ChangeState(newState, payload)
 
+    def isFree(self):
+        return self.moveStateMachine.isIdle()
 
     def MovetoPosition(self, targetPosition):
         target_frame = np.eye(4)
@@ -41,12 +46,11 @@ class MoveManager(Singleton):
         return False
 
     def MovetoTray(self, tray):
-        holderPosition = tray.GetHolderPosition()
-
-        while self.MovetoPosition(holderPosition) is False:
-            time.sleep(0.1)
-
+        self.ChangeState(eMoveState.MS_MOVING_TO_TRAY_HOLD_POSITION, tray)
         return True
+
+    def ChangeState(self, newState):
+        self.moveStateMachine.ChangeState(newState)
 
     def GetDistance(self, vector1, vector2):
         resVector = vector2 - vector1

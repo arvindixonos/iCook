@@ -23,6 +23,6 @@ trayPosition_6 = vmath.Vector3(0.0, 0.0, 0.0)
 trayPositions.append(trayPosition_6)
 
 stirrerHoldPosition = vmath.Vector3(5.0, 2.0, 5.5)
-idlePosition = vmath.Vector3(10.0, 10.0, 10.0)
+restPosition = vmath.Vector3(10.0, 10.0, 10.0)
 dropPosition = vmath.Vector3(0.0, 10.0, 0.0)
 
