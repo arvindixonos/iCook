@@ -1,4 +1,4 @@
-from Globals import urdfFilePath, idlePosition
+from Globals import urdfFilePath
 from Singleton import Singleton
 from MoveStateMachine import MoveStateMachine, eMoveState
 from Tray import Tray
@@ -9,7 +9,7 @@ from enum import Enum
 
 
 
-class MoveManager(Singleton):
+class MoveManager(metaclass=Singleton):
 
     robotChain = None
 
@@ -20,7 +20,6 @@ class MoveManager(Singleton):
     onIdle = None
 
     def __init__(self):
-        Singleton.__init__(self)
         self.robotChain = ikpy.chain.Chain.from_urdf_file(urdfFilePath)
         self.moveStateMachine = MoveStateMachine()
 
@@ -36,9 +35,11 @@ class MoveManager(Singleton):
     def MovetoPosition(self, targetPosition):
         target_frame = np.eye(4)
         target_frame[:3, 3] = targetPosition
-        jointsAngle = robotChain.inverse_kinematics(target_frame)
+        jointsAngle = self.robotChain.inverse_kinematics(target_frame)
 
-        replicatedPosition = robotChain.forward_kinematics(jointsAngle)
+        self.robotChain.
+
+        replicatedPosition = self.robotChain.forward_kinematics(jointsAngle)
 
         if self.GetDistance(targetPosition, replicatedPosition) < self.minimumDistance:
             return True

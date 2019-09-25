@@ -8,7 +8,7 @@ class eRecipeStepType(Enum):
     POUR = 4,
     SPRINKLE = 5,
     COVER_COOK = 6,
-    PLACE = 7
+    PLACE_ON_PAN = 7
 
 class RecipeStep:
     recipeStepType = eRecipeStepType.IDLE

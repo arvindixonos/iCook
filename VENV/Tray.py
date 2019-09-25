@@ -1,4 +1,4 @@
-from RepositoryManager import eIngredientType
+from Enums import eIngredientType
 from enum import Enum
 import numpy as np
 

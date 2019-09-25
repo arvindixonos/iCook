@@ -1,6 +1,6 @@
 import time
 from Singleton import Singleton
-from multiprocessing import Process, Manager, Dict, List, Value
+from multiprocessing import Process, Manager
 from MoveManager import MoveManager
 from RepositoryManager import RepositoryManager, eIngredientType
 from RecipeStep import eRecipeStepType
@@ -104,10 +104,18 @@ class CookingManager(Singleton):
             self.waitcondition.wait()
 
         elif recipeStepType == eRecipeStepType.STIR:
-            stirHeight = int(recipeStep.payload)
             stirStyle = int(recipeStep.payload)
             stepDuration = recipeStep.duration
-            MoveManager.getInstance().Stir(stepDuration, stirHeight, stirStyle)
+
+            MoveManager.getInstance().Stir(stepDuration, stirStyle)
             self.waitcondition.wait()
 
-        
+        elif recipeStepType == eRecipeStepType.POUR:
+            ingredientType = eIngredientType[recipeStep.payload]
+            ingredientTray = RepositoryManager.getInstance().GetIngredientTray(ingredientType)
+
+            MoveManager.getInstance().Pour(ingredientTray)
+            self.waitcondition.wait()
+
+
+

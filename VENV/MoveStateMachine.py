@@ -1,5 +1,5 @@
 from enum import Enum
-from statemachine import StateMachine, state
+from statemachine import StateMachine, State
 
 class eMoveState(Enum):
     MS_IDLE = 0,
@@ -66,5 +66,6 @@ class MoveStateMachine(StateMachine):
     def isIdle(self):
         return self.currentState == eMoveState.MS_IDLE
 
-    def __init__(self, onIdle):
-        self.OnIdle = onIdle
+    def __init__(self):
+        pass
+        # self.OnIdle = onIdle
