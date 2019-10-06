@@ -1,15 +1,37 @@
-from ikpy.chain import Chain
-import matplotlib.pyplot
-from mpl_toolkits.mplot3d import Axes3D
+import RPi.GPIO as GPIO
+import time
 
-ax = matplotlib.pyplot.figure().add_subplot(111, projection='3d')
+servoPINs = [17]
+# , 18, 22]
+dutyCycles = []
+pins = []
+GPIO.setmode(GPIO.BCM)
 
-my_chain = Chain.from_urdf_file("urdf/iCook.urdf")
+for i in range(0, len(servoPINs)):
+    GPIO.setup(servoPINs[i], GPIO.OUT)
+    dutyCycles.append(2.5)
+    pins.append(GPIO.PWM(servoPINs[i], 50))
+    pins[i].start(dutyCycles[i])
 
-joint_angles = my_chain.inverse_kinematics([[1, 0, 0, 1],
-                             [0, 1, 0, 0],
-                             [0, 0, 1, 0],
-                             [0, 0, 0, 1]])
+try:
+    while True:
 
-my_chain.plot(joint_angles, ax)
-matplotlib.pyplot.show()
+        for i in range(0, len(servoPINs)):
+            currentPin = pins[i]
+
+            currentPin.ChangeDutyCycle(dutyCycles[i])
+            time.sleep(0.01)
+
+            dutyCycles[i] += 0.05
+
+            if dutyCycles[i] >= 12.5:
+                time.sleep(1.5)
+                dutyCycles[i] = 2.5
+                pins[i].ChangeDutyCycle(dutyCycles[i])
+                time.sleep(1.5)
+
+except KeyboardInterrupt:
+    for i in range(0, len(servoPINs)):
+        pins[i].stop()
+
+    GPIO.cleanup()
